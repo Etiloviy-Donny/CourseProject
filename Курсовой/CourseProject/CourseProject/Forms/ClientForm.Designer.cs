@@ -9,9 +9,15 @@
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Label lblWelcome;
         private System.Windows.Forms.Label lblUserInfo;
-        private System.Windows.Forms.Label lblRequestCount;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panelSearch;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.ComboBox cmbSearchBy;
+        private System.Windows.Forms.Label lblSearchBy;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+
 
         /// <summary>
         /// Clean up any resources being used.
@@ -40,14 +46,20 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.lblWelcome = new System.Windows.Forms.Label();
             this.lblUserInfo = new System.Windows.Forms.Label();
-            this.lblRequestCount = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panelSearch = new System.Windows.Forms.Panel();
+            this.cmbSearchBy = new System.Windows.Forms.ComboBox();
+            this.lblSearchBy = new System.Windows.Forms.Label();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRequests)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panelSearch.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-
             // 
             // dataGridViewRequests
             // 
@@ -57,108 +69,82 @@
             this.dataGridViewRequests.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dataGridViewRequests.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewRequests.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewRequests.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewRequests.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewRequests.Location = new System.Drawing.Point(0, 89);
             this.dataGridViewRequests.Name = "dataGridViewRequests";
             this.dataGridViewRequests.ReadOnly = true;
             this.dataGridViewRequests.RowHeadersWidth = 51;
             this.dataGridViewRequests.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewRequests.Size = new System.Drawing.Size(882, 376);
+            this.dataGridViewRequests.Size = new System.Drawing.Size(663, 314);
             this.dataGridViewRequests.TabIndex = 0;
             this.dataGridViewRequests.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewRequests_CellFormatting);
-
             // 
             // btnCreateRequest
             // 
             this.btnCreateRequest.BackColor = System.Drawing.Color.LightGreen;
             this.btnCreateRequest.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnCreateRequest.Location = new System.Drawing.Point(20, 15);
-            this.btnCreateRequest.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCreateRequest.Location = new System.Drawing.Point(15, 12);
             this.btnCreateRequest.Name = "btnCreateRequest";
-            this.btnCreateRequest.Size = new System.Drawing.Size(150, 35);
+            this.btnCreateRequest.Size = new System.Drawing.Size(112, 28);
             this.btnCreateRequest.TabIndex = 1;
             this.btnCreateRequest.Text = "Создать заявку";
             this.btnCreateRequest.UseVisualStyleBackColor = false;
             this.btnCreateRequest.Click += new System.EventHandler(this.btnCreateRequest_Click);
-
             // 
             // btnRefresh
             // 
             this.btnRefresh.BackColor = System.Drawing.Color.LightBlue;
             this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnRefresh.Location = new System.Drawing.Point(178, 15);
-            this.btnRefresh.Margin = new System.Windows.Forms.Padding(4);
+            this.btnRefresh.Location = new System.Drawing.Point(134, 12);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(150, 35);
+            this.btnRefresh.Size = new System.Drawing.Size(112, 28);
             this.btnRefresh.TabIndex = 2;
             this.btnRefresh.Text = "Обновить";
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-
             // 
             // btnExit
             // 
+            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.BackColor = System.Drawing.Color.LightCoral;
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnExit.Location = new System.Drawing.Point(712, 15);
-            this.btnExit.Margin = new System.Windows.Forms.Padding(4);
+            this.btnExit.Location = new System.Drawing.Point(534, 12);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(150, 35);
+            this.btnExit.Size = new System.Drawing.Size(112, 28);
             this.btnExit.TabIndex = 3;
             this.btnExit.Text = "Выход";
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-
             // 
             // lblWelcome
             // 
             this.lblWelcome.AutoSize = true;
             this.lblWelcome.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblWelcome.Location = new System.Drawing.Point(16, 15);
-            this.lblWelcome.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblWelcome.Location = new System.Drawing.Point(12, 12);
             this.lblWelcome.Name = "lblWelcome";
-            this.lblWelcome.Size = new System.Drawing.Size(115, 25);
+            this.lblWelcome.Size = new System.Drawing.Size(175, 20);
             this.lblWelcome.TabIndex = 4;
             this.lblWelcome.Text = "Добро пожаловать!";
-
             // 
             // lblUserInfo
             // 
             this.lblUserInfo.AutoSize = true;
             this.lblUserInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblUserInfo.Location = new System.Drawing.Point(17, 50);
-            this.lblUserInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblUserInfo.Location = new System.Drawing.Point(3, 71);
             this.lblUserInfo.Name = "lblUserInfo";
-            this.lblUserInfo.Size = new System.Drawing.Size(121, 18);
+            this.lblUserInfo.Size = new System.Drawing.Size(91, 15);
             this.lblUserInfo.TabIndex = 5;
-            this.lblUserInfo.Text = "Информация о пользователе";
-
-            // 
-            // lblRequestCount
-            // 
-            this.lblRequestCount.AutoSize = true;
-            this.lblRequestCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblRequestCount.Location = new System.Drawing.Point(17, 80);
-            this.lblRequestCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblRequestCount.Name = "lblRequestCount";
-            this.lblRequestCount.Size = new System.Drawing.Size(156, 18);
-            this.lblRequestCount.TabIndex = 6;
-            this.lblRequestCount.Text = "Количество заявок: 0";
-
+            this.lblUserInfo.Text = "Список заявок";
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel1.Controls.Add(this.lblRequestCount);
             this.panel1.Controls.Add(this.lblUserInfo);
             this.panel1.Controls.Add(this.lblWelcome);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(882, 110);
+            this.panel1.Size = new System.Drawing.Size(663, 89);
             this.panel1.TabIndex = 7;
-
             // 
             // panel2
             // 
@@ -167,23 +153,90 @@
             this.panel2.Controls.Add(this.btnRefresh);
             this.panel2.Controls.Add(this.btnExit);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 486);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4);
+            this.panel2.Location = new System.Drawing.Point(0, 403);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(882, 65);
+            this.panel2.Size = new System.Drawing.Size(663, 53);
             this.panel2.TabIndex = 8;
-
+            // 
+            // panelSearch
+            // 
+            this.panelSearch.Controls.Add(this.cmbSearchBy);
+            this.panelSearch.Controls.Add(this.lblSearchBy);
+            this.panelSearch.Controls.Add(this.btnSearch);
+            this.panelSearch.Controls.Add(this.txtSearch);
+            this.panelSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelSearch.Location = new System.Drawing.Point(3, 3);
+            this.panelSearch.Name = "panelSearch";
+            this.panelSearch.Size = new System.Drawing.Size(876, 34);
+            this.panelSearch.TabIndex = 3;
+            // 
+            // cmbSearchBy
+            // 
+            this.cmbSearchBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSearchBy.FormattingEnabled = true;
+            this.cmbSearchBy.Items.AddRange(new object[] {
+            "Все поля",
+            "Адрес",
+            "Мастер",
+            "Статус",
+            "Номер заявки"});
+            this.cmbSearchBy.Location = new System.Drawing.Point(600, 6);
+            this.cmbSearchBy.Name = "cmbSearchBy";
+            this.cmbSearchBy.Size = new System.Drawing.Size(120, 21);
+            this.cmbSearchBy.TabIndex = 3;
+            // 
+            // lblSearchBy
+            // 
+            this.lblSearchBy.AutoSize = true;
+            this.lblSearchBy.Location = new System.Drawing.Point(530, 10);
+            this.lblSearchBy.Name = "lblSearchBy";
+            this.lblSearchBy.Size = new System.Drawing.Size(62, 13);
+            this.lblSearchBy.TabIndex = 2;
+            this.lblSearchBy.Text = "Искать по:";
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.BackColor = System.Drawing.Color.LightBlue;
+            this.btnSearch.Location = new System.Drawing.Point(730, 5);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(140, 23);
+            this.btnSearch.TabIndex = 1;
+            this.btnSearch.Text = "Найти / Сбросить";
+            this.btnSearch.UseVisualStyleBackColor = false;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(12, 7);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(500, 20);
+            this.txtSearch.TabIndex = 0;
+            this.txtSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearch_KeyPress);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.panelSearch, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 191F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(882, 553);
+            this.tableLayoutPanel1.TabIndex = 4;
             // 
             // ClientForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(882, 551);
+            this.ClientSize = new System.Drawing.Size(663, 456);
             this.Controls.Add(this.dataGridViewRequests);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.MinimumSize = new System.Drawing.Size(900, 600);
+            this.MinimumSize = new System.Drawing.Size(679, 495);
             this.Name = "ClientForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Мои заявки";
@@ -192,6 +245,9 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
+            this.panelSearch.ResumeLayout(false);
+            this.panelSearch.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

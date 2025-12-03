@@ -29,6 +29,11 @@ namespace CourseProject
         private System.Windows.Forms.Button btnCreateUser;
         private System.Windows.Forms.Button btnAddRequest;
         private System.Windows.Forms.Button btnDeleteRequest;
+        private System.Windows.Forms.Panel panelSearch;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.ComboBox cmbSearchBy;
+        private System.Windows.Forms.Label lblSearchBy;
 
 
         /// <summary>
@@ -66,21 +71,27 @@ namespace CourseProject
             this.cmbMaster = new System.Windows.Forms.ComboBox();
             this.cmbStatus = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panelSearch = new System.Windows.Forms.Panel();
+            this.cmbSearchBy = new System.Windows.Forms.ComboBox();
+            this.lblSearchBy = new System.Windows.Forms.Label();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.txtSearch = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnDeleteRequest = new System.Windows.Forms.Button();
             this.btnAddRequest = new System.Windows.Forms.Button();
             this.btnCreateUser = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRequests)).BeginInit();
             this.panel1.SuspendLayout();
+            this.panelSearch.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewRequests
             // 
             this.dataGridViewRequests.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewRequests.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewRequests.Location = new System.Drawing.Point(0, 40);
             this.dataGridViewRequests.Name = "dataGridViewRequests";
-            this.dataGridViewRequests.Size = new System.Drawing.Size(882, 366);
+            this.dataGridViewRequests.Size = new System.Drawing.Size(882, 326);
             this.dataGridViewRequests.TabIndex = 0;
             this.dataGridViewRequests.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewRequests_CellFormatting);
             this.dataGridViewRequests.SelectionChanged += new System.EventHandler(this.dataGridViewRequests_SelectionChanged);
@@ -197,11 +208,68 @@ namespace CourseProject
             // panel1
             // 
             this.panel1.Controls.Add(this.dataGridViewRequests);
+            this.panel1.Controls.Add(this.panelSearch);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(882, 366);
             this.panel1.TabIndex = 1;
+            // 
+            // panelSearch
+            // 
+            this.panelSearch.Controls.Add(this.cmbSearchBy);
+            this.panelSearch.Controls.Add(this.lblSearchBy);
+            this.panelSearch.Controls.Add(this.btnSearch);
+            this.panelSearch.Controls.Add(this.txtSearch);
+            this.panelSearch.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSearch.Location = new System.Drawing.Point(0, 0);
+            this.panelSearch.Name = "panelSearch";
+            this.panelSearch.Size = new System.Drawing.Size(882, 40);
+            this.panelSearch.TabIndex = 1;
+            // 
+            // cmbSearchBy
+            // 
+            this.cmbSearchBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSearchBy.FormattingEnabled = true;
+            this.cmbSearchBy.Items.AddRange(new object[] {
+            "Все поля",
+            "Клиент",
+            "Адрес",
+            "Мастер",
+            "Статус",
+            "Номер заявки"});
+            this.cmbSearchBy.Location = new System.Drawing.Point(600, 8);
+            this.cmbSearchBy.Name = "cmbSearchBy";
+            this.cmbSearchBy.Size = new System.Drawing.Size(120, 21);
+            this.cmbSearchBy.TabIndex = 3;
+            // 
+            // lblSearchBy
+            // 
+            this.lblSearchBy.AutoSize = true;
+            this.lblSearchBy.Location = new System.Drawing.Point(530, 12);
+            this.lblSearchBy.Name = "lblSearchBy";
+            this.lblSearchBy.Size = new System.Drawing.Size(64, 13);
+            this.lblSearchBy.TabIndex = 2;
+            this.lblSearchBy.Text = "Искать по:";
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.BackColor = System.Drawing.Color.LightBlue;
+            this.btnSearch.Location = new System.Drawing.Point(730, 7);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(140, 23);
+            this.btnSearch.TabIndex = 1;
+            this.btnSearch.Text = "Найти / Сбросить";
+            this.btnSearch.UseVisualStyleBackColor = false;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(12, 9);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(500, 20);
+            this.txtSearch.TabIndex = 0;
+            this.txtSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearch_KeyPress);
             // 
             // panel2
             // 
@@ -230,7 +298,7 @@ namespace CourseProject
             // 
             this.btnDeleteRequest.BackColor = System.Drawing.Color.LightCoral;
             this.btnDeleteRequest.Enabled = false;
-            this.btnDeleteRequest.Location = new System.Drawing.Point(720, 133);
+            this.btnDeleteRequest.Location = new System.Drawing.Point(720, 80);
             this.btnDeleteRequest.Name = "btnDeleteRequest";
             this.btnDeleteRequest.Size = new System.Drawing.Size(120, 30);
             this.btnDeleteRequest.TabIndex = 16;
@@ -241,7 +309,7 @@ namespace CourseProject
             // btnAddRequest
             // 
             this.btnAddRequest.BackColor = System.Drawing.Color.LightGreen;
-            this.btnAddRequest.Location = new System.Drawing.Point(720, 80);
+            this.btnAddRequest.Location = new System.Drawing.Point(720, 40);
             this.btnAddRequest.Name = "btnAddRequest";
             this.btnAddRequest.Size = new System.Drawing.Size(120, 30);
             this.btnAddRequest.TabIndex = 15;
@@ -274,15 +342,18 @@ namespace CourseProject
             this.Load += new System.EventHandler(this.AdminForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRequests)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.panelSearch.ResumeLayout(false);
+            this.panelSearch.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
+    }
+
         #endregion
 
        
-    }
 }
 

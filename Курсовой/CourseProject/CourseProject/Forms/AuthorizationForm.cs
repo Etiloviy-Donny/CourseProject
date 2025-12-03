@@ -93,7 +93,7 @@ namespace CourseProject
             lblStatus = new Label
             {
                 Text = "",
-                Location = new Point(30, 160),
+                Location = new Point(120, 100),
                 Size = new Size(280, 20),
                 Font = new Font("Microsoft Sans Serif", 9F),
                 ForeColor = Color.Red,

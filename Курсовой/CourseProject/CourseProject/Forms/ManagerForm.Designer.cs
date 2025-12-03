@@ -23,6 +23,12 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnAddRequest;
         private System.Windows.Forms.Button btnDeleteRequest;
+        private System.Windows.Forms.Panel panelSearch;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.ComboBox cmbSearchBy;
+        private System.Windows.Forms.Label lblSearchBy;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 
 
         /// <summary>
@@ -63,9 +69,17 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnDeleteRequest = new System.Windows.Forms.Button();
             this.btnAddRequest = new System.Windows.Forms.Button();
+            this.panelSearch = new System.Windows.Forms.Panel();
+            this.cmbSearchBy = new System.Windows.Forms.ComboBox();
+            this.lblSearchBy = new System.Windows.Forms.Label();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRequests)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panelSearch.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewRequests
@@ -73,7 +87,7 @@
             this.dataGridViewRequests.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewRequests.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewRequests.Name = "dataGridViewRequests";
-            this.dataGridViewRequests.Size = new System.Drawing.Size(882, 366);
+            this.dataGridViewRequests.Size = new System.Drawing.Size(882, 316);
             this.dataGridViewRequests.TabIndex = 0;
             this.dataGridViewRequests.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewRequests_CellFormatting);
             this.dataGridViewRequests.SelectionChanged += new System.EventHandler(this.dataGridViewRequests_SelectionChanged);
@@ -191,9 +205,9 @@
             // 
             this.panel1.Controls.Add(this.dataGridViewRequests);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Location = new System.Drawing.Point(3, 43);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(882, 366);
+            this.panel1.Size = new System.Drawing.Size(882, 316);
             this.panel1.TabIndex = 1;
             // 
             // panel2
@@ -212,8 +226,8 @@
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.btnUpdate);
             this.panel2.Controls.Add(this.btnRefresh);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 366);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(3, 365);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(882, 185);
             this.panel2.TabIndex = 2;
@@ -222,7 +236,7 @@
             // 
             this.btnDeleteRequest.BackColor = System.Drawing.Color.LightCoral;
             this.btnDeleteRequest.Enabled = false;
-            this.btnDeleteRequest.Location = new System.Drawing.Point(720, 133);
+            this.btnDeleteRequest.Location = new System.Drawing.Point(720, 80);
             this.btnDeleteRequest.Name = "btnDeleteRequest";
             this.btnDeleteRequest.Size = new System.Drawing.Size(120, 30);
             this.btnDeleteRequest.TabIndex = 16;
@@ -233,7 +247,7 @@
             // btnAddRequest
             // 
             this.btnAddRequest.BackColor = System.Drawing.Color.LightGreen;
-            this.btnAddRequest.Location = new System.Drawing.Point(720, 80);
+            this.btnAddRequest.Location = new System.Drawing.Point(720, 40);
             this.btnAddRequest.Name = "btnAddRequest";
             this.btnAddRequest.Size = new System.Drawing.Size(120, 30);
             this.btnAddRequest.TabIndex = 15;
@@ -241,13 +255,85 @@
             this.btnAddRequest.UseVisualStyleBackColor = false;
             this.btnAddRequest.Click += new System.EventHandler(this.btnAddRequest_Click);
             // 
+            // panelSearch
+            // 
+            this.panelSearch.Controls.Add(this.cmbSearchBy);
+            this.panelSearch.Controls.Add(this.lblSearchBy);
+            this.panelSearch.Controls.Add(this.btnSearch);
+            this.panelSearch.Controls.Add(this.txtSearch);
+            this.panelSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelSearch.Location = new System.Drawing.Point(3, 3);
+            this.panelSearch.Name = "panelSearch";
+            this.panelSearch.Size = new System.Drawing.Size(882, 34);
+            this.panelSearch.TabIndex = 3;
+            // 
+            // cmbSearchBy
+            // 
+            this.cmbSearchBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSearchBy.FormattingEnabled = true;
+            this.cmbSearchBy.Items.AddRange(new object[] {
+            "Все поля",
+            "Клиент",
+            "Адрес",
+            "Мастер",
+            "Статус",
+            "Номер заявки"});
+            this.cmbSearchBy.Location = new System.Drawing.Point(600, 6);
+            this.cmbSearchBy.Name = "cmbSearchBy";
+            this.cmbSearchBy.Size = new System.Drawing.Size(120, 21);
+            this.cmbSearchBy.TabIndex = 3;
+            // 
+            // lblSearchBy
+            // 
+            this.lblSearchBy.AutoSize = true;
+            this.lblSearchBy.Location = new System.Drawing.Point(530, 10);
+            this.lblSearchBy.Name = "lblSearchBy";
+            this.lblSearchBy.Size = new System.Drawing.Size(64, 13);
+            this.lblSearchBy.TabIndex = 2;
+            this.lblSearchBy.Text = "Искать по:";
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.BackColor = System.Drawing.Color.LightBlue;
+            this.btnSearch.Location = new System.Drawing.Point(730, 5);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(140, 23);
+            this.btnSearch.TabIndex = 1;
+            this.btnSearch.Text = "Найти / Сбросить";
+            this.btnSearch.UseVisualStyleBackColor = false;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(12, 7);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(500, 20);
+            this.txtSearch.TabIndex = 0;
+            this.txtSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearch_KeyPress);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.panelSearch, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 2);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 191F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(882, 553);
+            this.tableLayoutPanel1.TabIndex = 4;
+            // 
             // ManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(882, 551);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.panel2);
+            this.ClientSize = new System.Drawing.Size(882, 553);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "ManagerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Панель менеджера";
@@ -256,6 +342,9 @@
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panelSearch.ResumeLayout(false);
+            this.panelSearch.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

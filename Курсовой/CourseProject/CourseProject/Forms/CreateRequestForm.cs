@@ -18,10 +18,10 @@ namespace CourseProject
         private void CreateRequestForm_Load(object sender, EventArgs e)
         {
             // Автозаполнение информации о пользователе
-            txtAddress.Text = "Введите ваш адрес"; // Можно сделать автозаполнение из профиля
+            txtAddress.Text = "Введите ваш адрес";
             lblUserInfo.Text = $"{_currentUser.Surname} {_currentUser.Name} {_currentUser.Patronymic}";
 
-            // Загружаем номер телефона пользователя из базы данных
+            // Загружаем номер телефона пользователя из базы данных для отображения
             LoadUserPhoneNumber();
         }
 
@@ -40,7 +40,12 @@ namespace CourseProject
                     var result = command.ExecuteScalar();
                     if (result != null && result != DBNull.Value)
                     {
+                        // Показываем текущий номер как подсказку
                         txtPhoneNumber.Text = result.ToString();
+                    }
+                    else
+                    {
+                        txtPhoneNumber.Text = "";
                     }
                 }
             }
@@ -76,12 +81,12 @@ namespace CourseProject
 
             if (string.IsNullOrWhiteSpace(txtPhoneNumber.Text))
             {
-                MessageBox.Show("Введите номер телефона", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Введите номер телефона для заявки", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtPhoneNumber.Focus();
                 return false;
             }
 
-            // Валидация формата номера телефона (простая проверка)
+            // Валидация формата номера телефона
             if (!IsValidPhoneNumber(txtPhoneNumber.Text))
             {
                 MessageBox.Show("Введите корректный номер телефона", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -109,14 +114,11 @@ namespace CourseProject
                 {
                     connection.Open();
 
-                    // Обновляем номер телефона пользователя
-                    UpdateUserPhoneNumber();
-
                     string query = @"
                         INSERT INTO Request 
-                        (RequestDate, Address, IdUser, CountersNumber, Comment, Master, Status) 
+                        (RequestDate, Address, IdUser, CountersNumber, Comment, Master, Status, TelephoneNumber) 
                         VALUES 
-                        (@RequestDate, @Address, @UserId, @CounterNumber, @Comment, @Master, @Status)";
+                        (@RequestDate, @Address, @UserId, @CounterNumber, @Comment, @Master, @Status, @TelephoneNumber)";
 
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@RequestDate", DateTime.Now);
@@ -124,8 +126,9 @@ namespace CourseProject
                     command.Parameters.AddWithValue("@UserId", _currentUser.Id);
                     command.Parameters.AddWithValue("@CounterNumber", txtCounterNumber.Text.Trim());
                     command.Parameters.AddWithValue("@Comment", string.IsNullOrWhiteSpace(txtComment.Text) ? (object)DBNull.Value : txtComment.Text.Trim());
-                    command.Parameters.AddWithValue("@Master", (object)DBNull.Value); // Пока нет мастера
+                    command.Parameters.AddWithValue("@Master", (object)DBNull.Value);
                     command.Parameters.AddWithValue("@Status", "Новая");
+                    command.Parameters.AddWithValue("@TelephoneNumber", txtPhoneNumber.Text.Trim());
 
                     int result = command.ExecuteNonQuery();
 
@@ -144,28 +147,6 @@ namespace CourseProject
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка создания заявки: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void UpdateUserPhoneNumber()
-        {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    string query = "UPDATE [User] SET TelephoneNumber = @PhoneNumber WHERE IdUser = @UserId";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@PhoneNumber", txtPhoneNumber.Text.Trim());
-                    command.Parameters.AddWithValue("@UserId", _currentUser.Id);
-
-                    command.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка обновления номера телефона: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -12,6 +12,7 @@ namespace CourseProject
     {
         private User _currentUser;
         private string connectionString = @"Data Source=localhost;Initial Catalog=CourseProject;User ID=EgorP;Password=ISPP;Encrypt=False";
+        private DataTable _allRequestsDataTable;
 
         public AdminForm(User user)
         {
@@ -24,6 +25,7 @@ namespace CourseProject
             LoadAllRequests();
             LoadStatuses();
             LoadMastersFromDB();
+            LoadSearchOptions();
         }
 
         private void LoadAllRequests()
@@ -35,26 +37,29 @@ namespace CourseProject
                     connection.Open();
 
                     string query = @"
-                        SELECT 
-                            r.IdRequest,
-                            r.RequestDate,
-                            r.Address,
-                            u.UserSurname + ' ' + u.UserName as ClientName,
-                            u.TelephoneNumber,
-                            r.CountersNumber,
-                            r.Comment,
-                            ISNULL(r.Master, 'Не назначен') as Master,
-                            r.Status
-                        FROM Request r
-                        INNER JOIN [User] u ON r.IdUser = u.IdUser
-                        ORDER BY r.RequestDate DESC";
+                SELECT 
+                    r.IdRequest,
+                    r.RequestDate,
+                    r.Address,
+                    u.UserSurname + ' ' + u.UserName as ClientName,
+                    u.TelephoneNumber,
+                    r.CountersNumber,
+                    r.Comment,
+                    ISNULL(r.Master, 'Не назначен') as Master,
+                    r.Status
+                FROM Request r
+                INNER JOIN [User] u ON r.IdUser = u.IdUser
+                ORDER BY r.RequestDate DESC";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
+                    _allRequestsDataTable = new DataTable();
+                    adapter.Fill(_allRequestsDataTable);
 
-                    dataGridViewRequests.DataSource = dataTable;
+                    dataGridViewRequests.DataSource = _allRequestsDataTable;
                     ConfigureDataGridView();
+
+                    // Сбрасываем заголовок
+                    this.Text = "Панель администратора";
                 }
             }
             catch (Exception ex)
@@ -62,6 +67,13 @@ namespace CourseProject
                 MessageBox.Show($"Ошибка загрузки заявок: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void LoadSearchOptions()
+        {
+            cmbSearchBy.SelectedIndex = 0; // Выбираем "Все поля" по умолчанию
+        }
+
+       
 
         private void LoadMastersFromDB()
         {
@@ -150,7 +162,7 @@ namespace CourseProject
                     if (addUserForm.DialogResult == DialogResult.OK)
                     {
                         LoadMastersFromDB();
-                        MessageBox.Show("Список мастеров обновлен!", "Информация",
+                        MessageBox.Show("Список пользователей обновлен!", "Информация",
                                       MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 };
@@ -291,6 +303,8 @@ namespace CourseProject
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             LoadAllRequests();
+            txtSearch.Text = ""; // Сбрасываем поиск
+            this.Text = "Панель администратора"; // Сбрасываем заголовок
         }
 
         private void dataGridViewRequests_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -399,6 +413,131 @@ namespace CourseProject
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            ApplySearchFilter();
+        }
+
+        private void txtSearch_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Поиск при нажатии Enter
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                ApplySearchFilter();
+                e.Handled = true;
+            }
+        }
+
+        private void ApplySearchFilter()
+        {
+            if (_allRequestsDataTable == null) return;
+
+            string searchText = txtSearch.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                dataGridViewRequests.DataSource = _allRequestsDataTable;
+                return;
+            }
+
+            string searchBy = cmbSearchBy.SelectedItem?.ToString() ?? "Все поля";
+            string filterExpression = "";
+
+            // Экранируем специальные символы для DataView RowFilter
+            string escapedSearchText = EscapeRowFilterValue(searchText);
+
+            switch (searchBy)
+            {
+                case "Все поля":
+                    // Для числового поля IdRequest используем Convert, чтобы преобразовать в строку
+                    // Для поиска по номеру заявки как тексту
+                    filterExpression = string.Format(
+                        "(ClientName LIKE '*{0}*') OR " +
+                        "(Address LIKE '*{0}*') OR " +
+                        "(Master LIKE '*{0}*') OR " +
+                        "(Status LIKE '*{0}*') OR " +
+                        "(Comment LIKE '*{0}*') OR " +
+                        "(TelephoneNumber LIKE '*{0}*') OR " +
+                        "(CONVERT(IdRequest, 'System.String') LIKE '*{0}*')",
+                        escapedSearchText);
+                    break;
+
+                case "Клиент":
+                    filterExpression = string.Format("ClientName LIKE '*{0}*'", escapedSearchText);
+                    break;
+
+                case "Адрес":
+                    filterExpression = string.Format("Address LIKE '*{0}*'", escapedSearchText);
+                    break;
+
+                case "Мастер":
+                    filterExpression = string.Format("Master LIKE '*{0}*'", escapedSearchText);
+                    break;
+
+                case "Статус":
+                    filterExpression = string.Format("Status LIKE '*{0}*'", escapedSearchText);
+                    break;
+
+                case "Номер заявки":
+                    // Для точного поиска по номеру заявки
+                    if (int.TryParse(searchText, out int requestId))
+                    {
+                        // Можно искать как точное число
+                        filterExpression = string.Format("IdRequest = {0}", requestId);
+                        // ИЛИ как текст (если хотите частичное совпадение):
+                        // filterExpression = string.Format("CONVERT(IdRequest, 'System.String') LIKE '*{0}*'", escapedSearchText);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Введите корректный номер заявки (только цифры)", "Ошибка",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    break;
+            }
+
+            try
+            {
+                DataView filteredView = new DataView(_allRequestsDataTable);
+                filteredView.RowFilter = filterExpression;
+
+                dataGridViewRequests.DataSource = filteredView;
+
+                int foundCount = filteredView.Count;
+                if (foundCount == 0)
+                {
+                    MessageBox.Show("Заявки не найдены", "Результат поиска",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    this.Text = $"Панель менеджера - Найдено: {foundCount} заявок";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при поиске: {ex.Message}\nФильтр: {filterExpression}\n\nПопробуйте ввести поисковый запрос без специальных символов.", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string EscapeRowFilterValue(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+
+            // Экранируем специальные символы для DataView RowFilter
+            // DataView использует * для любого количества символов
+            // и ? для одного символа
+            value = value.Replace("[", "[[]");
+            value = value.Replace("]", "[]]");
+            value = value.Replace("*", "[*]");
+            value = value.Replace("?", "[?]");
+            value = value.Replace("#", "[#]");
+            value = value.Replace("'", "''");
+            value = value.Replace("\"", "\"\"");
+
+            return value;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace CourseProject
     {
         private User _currentUser;
         private string connectionString = @"Data Source=localhost;Initial Catalog=CourseProject;User ID=EgorP;Password=ISPP;Encrypt=False";
+        private DataTable _allRequestsDataTable;
 
         public ManagerForm(User user)
         {
@@ -24,6 +25,7 @@ namespace CourseProject
             LoadAllRequests();
             LoadStatuses();
             LoadMastersFromDB();
+            LoadSearchOptions();
         }
 
         private void LoadAllRequests()
@@ -50,17 +52,24 @@ namespace CourseProject
                         ORDER BY r.RequestDate DESC";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
+                    _allRequestsDataTable = new DataTable();
+                    adapter.Fill(_allRequestsDataTable);
 
-                    dataGridViewRequests.DataSource = dataTable;
+                    dataGridViewRequests.DataSource = _allRequestsDataTable;
                     ConfigureDataGridView();
+
+                    this.Text = "Панель менеджера";
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка загрузки заявок: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void LoadSearchOptions()
+        {
+            cmbSearchBy.SelectedIndex = 0;
         }
 
         private void LoadMastersFromDB()
@@ -291,6 +300,8 @@ namespace CourseProject
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             LoadAllRequests();
+            txtSearch.Text = "";
+            this.Text = "Панель менеджера";
         }
 
         private void dataGridViewRequests_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -333,17 +344,6 @@ namespace CourseProject
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
-            }
-        }
-
-        private void AdminForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            var result = MessageBox.Show("Вы уверены, что хотите выйти?", "Подтверждение выхода",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (result == DialogResult.No)
-            {
-                e.Cancel = true;
             }
         }
 
@@ -399,6 +399,149 @@ namespace CourseProject
                     MessageBox.Show($"Ошибка при удалении заявки: {ex.Message}", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtSearch.Text))
+            {
+                dataGridViewRequests.DataSource = _allRequestsDataTable;
+                this.Text = "Панель менеджера";
+            }
+            else
+            {
+                ApplySearchFilter();
+            }
+        }
+
+        private void txtSearch_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                ApplySearchFilter();
+                e.Handled = true;
+            }
+        }
+
+        private void ApplySearchFilter()
+        {
+            if (_allRequestsDataTable == null) return;
+
+            string searchText = txtSearch.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                dataGridViewRequests.DataSource = _allRequestsDataTable;
+                return;
+            }
+
+            string searchBy = cmbSearchBy.SelectedItem?.ToString() ?? "Все поля";
+            string filterExpression = "";
+
+            // Экранируем специальные символы для DataView RowFilter
+            string escapedSearchText = EscapeRowFilterValue(searchText);
+
+            switch (searchBy)
+            {
+                case "Все поля":
+                    // Для числового поля IdRequest используем Convert, чтобы преобразовать в строку
+                    // Для поиска по номеру заявки как тексту
+                    filterExpression = string.Format(
+                        "(ClientName LIKE '*{0}*') OR " +
+                        "(Address LIKE '*{0}*') OR " +
+                        "(Master LIKE '*{0}*') OR " +
+                        "(Status LIKE '*{0}*') OR " +
+                        "(Comment LIKE '*{0}*') OR " +
+                        "(TelephoneNumber LIKE '*{0}*') OR " +
+                        "(CONVERT(IdRequest, 'System.String') LIKE '*{0}*')",
+                        escapedSearchText);
+                    break;
+
+                case "Клиент":
+                    filterExpression = string.Format("ClientName LIKE '*{0}*'", escapedSearchText);
+                    break;
+
+                case "Адрес":
+                    filterExpression = string.Format("Address LIKE '*{0}*'", escapedSearchText);
+                    break;
+
+                case "Мастер":
+                    filterExpression = string.Format("Master LIKE '*{0}*'", escapedSearchText);
+                    break;
+
+                case "Статус":
+                    filterExpression = string.Format("Status LIKE '*{0}*'", escapedSearchText);
+                    break;
+
+                case "Номер заявки":
+                    // Для точного поиска по номеру заявки
+                    if (int.TryParse(searchText, out int requestId))
+                    {
+                        // Можно искать как точное число
+                        filterExpression = string.Format("IdRequest = {0}", requestId);
+                        // ИЛИ как текст (если хотите частичное совпадение):
+                        // filterExpression = string.Format("CONVERT(IdRequest, 'System.String') LIKE '*{0}*'", escapedSearchText);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Введите корректный номер заявки (только цифры)", "Ошибка",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    break;
+            }
+
+            try
+            {
+                DataView filteredView = new DataView(_allRequestsDataTable);
+                filteredView.RowFilter = filterExpression;
+
+                dataGridViewRequests.DataSource = filteredView;
+
+                int foundCount = filteredView.Count;
+                if (foundCount == 0)
+                {
+                    MessageBox.Show("Заявки не найдены", "Результат поиска",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    this.Text = $"Панель менеджера - Найдено: {foundCount} заявок";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при поиске: {ex.Message}\nФильтр: {filterExpression}\n\nПопробуйте ввести поисковый запрос без специальных символов.", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string EscapeRowFilterValue(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+
+            // Экранируем специальные символы для DataView RowFilter
+            // DataView использует * для любого количества символов
+            // и ? для одного символа
+            value = value.Replace("[", "[[]");
+            value = value.Replace("]", "[]]");
+            value = value.Replace("*", "[*]");
+            value = value.Replace("?", "[?]");
+            value = value.Replace("#", "[#]");
+            value = value.Replace("'", "''");
+            value = value.Replace("\"", "\"\"");
+
+            return value;
+        }
+
+        private void ManagerForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var result = MessageBox.Show("Вы уверены, что хотите выйти?", "Подтверждение выхода",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.No)
+            {
+                e.Cancel = true;
             }
         }
     }

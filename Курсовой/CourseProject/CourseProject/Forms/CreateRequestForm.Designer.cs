@@ -10,7 +10,6 @@ namespace CourseProject
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private Label label1;
         private Label label2;
         private Label label3;
         private Label label4;
@@ -44,7 +43,6 @@ namespace CourseProject
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
             this.lblUserInfo = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtAddress = new System.Windows.Forms.TextBox();
@@ -56,17 +54,8 @@ namespace CourseProject
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblPhoneNumber = new System.Windows.Forms.Label();
             this.txtPhoneNumber = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
-            this.label1.Location = new System.Drawing.Point(20, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(108, 15);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Пользователь:";
             // 
             // lblUserInfo
             // 
@@ -108,6 +97,7 @@ namespace CourseProject
             this.txtCounterNumber.Name = "txtCounterNumber";
             this.txtCounterNumber.Size = new System.Drawing.Size(200, 20);
             this.txtCounterNumber.TabIndex = 12;
+            this.txtCounterNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPhoneNumber_KeyPress);
             // 
             // label4
             // 
@@ -153,7 +143,7 @@ namespace CourseProject
             this.lblPhoneNumber.AutoSize = true;
             this.lblPhoneNumber.Location = new System.Drawing.Point(14, 132);
             this.lblPhoneNumber.Name = "lblPhoneNumber";
-            this.lblPhoneNumber.Size = new System.Drawing.Size(96, 13);
+            this.lblPhoneNumber.Size = new System.Drawing.Size(100, 13);
             this.lblPhoneNumber.TabIndex = 5;
             this.lblPhoneNumber.Text = "Номер телефона:*";
             // 
@@ -164,6 +154,16 @@ namespace CourseProject
             this.txtPhoneNumber.Size = new System.Drawing.Size(200, 20);
             this.txtPhoneNumber.TabIndex = 6;
             this.txtPhoneNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPhoneNumber_KeyPress);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.label1.Location = new System.Drawing.Point(20, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(218, 15);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Введите информацию о заявке";
             // 
             // CreateRequestForm
             // 
@@ -191,5 +191,7 @@ namespace CourseProject
         }
 
         #endregion
+
+        private Label label1;
     }
 }
