@@ -73,7 +73,7 @@ namespace CourseProject
             cmbSearchBy.SelectedIndex = 0; // Выбираем "Все поля" по умолчанию
         }
 
-       
+
 
         private void LoadMastersFromDB()
         {
@@ -538,6 +538,72 @@ namespace CourseProject
             value = value.Replace("\"", "\"\"");
 
             return value;
+        }
+    
+         private void btnExport_Click(object sender, EventArgs e)
+         {
+            if (_allRequestsDataTable == null || _allRequestsDataTable.Rows.Count == 0)
+            {
+                MessageBox.Show("Нет данных для экспорта", "Информация",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Предлагаем выбор формата
+            using (var dialog = new Form())
+            {
+                dialog.Text = "Выберите формат экспорта";
+                dialog.Size = new Size(300, 150);
+                dialog.StartPosition = FormStartPosition.CenterParent;
+
+                var btnExcel = new Button { Text = "Excel (.xlsx)", Location = new Point(50, 20), Size = new Size(200, 30) };
+                var btnCSV = new Button { Text = "CSV (.csv)", Location = new Point(50, 60), Size = new Size(200, 30) };
+
+                btnExcel.Click += (s, args) =>
+                {
+                    dialog.DialogResult = DialogResult.Yes;
+                    ExcelHelper.ExportToExcel(_allRequestsDataTable, $"Заявки_админ_{DateTime.Now:yyyyMMdd}");
+                    dialog.Close();
+                };
+
+                btnCSV.Click += (s, args) =>
+                {
+                    dialog.DialogResult = DialogResult.No;
+                    ExcelHelper.ExportToCSV(_allRequestsDataTable, $"Заявки_админ_{DateTime.Now:yyyyMMdd}");
+                    dialog.Close();
+                };
+
+                dialog.Controls.Add(btnExcel);
+                dialog.Controls.Add(btnCSV);
+                dialog.ShowDialog();
+            }
+        }
+
+        // Импорт данных
+        private void btnImport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var importedData = ExcelHelper.ImportFromExcel();
+
+                if (importedData != null && importedData.Rows.Count > 0)
+                {
+                    // Передаем ID текущего администратора
+                    ImportPreviewForm previewForm = new ImportPreviewForm(importedData, connectionString);
+
+                    if (previewForm.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadAllRequests();
+                        MessageBox.Show("Импорт завершен успешно!",
+                            "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при импорте: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -25,6 +25,7 @@
         private System.Windows.Forms.ComboBox cmbSearchBy;
         private System.Windows.Forms.Label lblSearchBy;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button btnExport;
 
 
 
@@ -62,6 +63,7 @@
             this.cmbStatus = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnExport = new System.Windows.Forms.Button();
             this.panelSearch = new System.Windows.Forms.Panel();
             this.cmbSearchBy = new System.Windows.Forms.ComboBox();
             this.lblSearchBy = new System.Windows.Forms.Label();
@@ -77,18 +79,20 @@
             // 
             // dataGridViewRequests
             // 
+            this.dataGridViewRequests.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dataGridViewRequests.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewRequests.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewRequests.Name = "dataGridViewRequests";
-            this.dataGridViewRequests.Size = new System.Drawing.Size(882, 316);
+            this.dataGridViewRequests.Size = new System.Drawing.Size(876, 316);
             this.dataGridViewRequests.TabIndex = 0;
             this.dataGridViewRequests.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewRequests_CellFormatting);
             this.dataGridViewRequests.SelectionChanged += new System.EventHandler(this.dataGridViewRequests_SelectionChanged);
             // 
             // btnRefresh
             // 
+            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRefresh.BackColor = System.Drawing.Color.LightBlue;
-            this.btnRefresh.Location = new System.Drawing.Point(580, 80);
+            this.btnRefresh.Location = new System.Drawing.Point(730, 80);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(120, 30);
             this.btnRefresh.TabIndex = 11;
@@ -98,8 +102,9 @@
             // 
             // btnUpdate
             // 
+            this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdate.BackColor = System.Drawing.Color.LightGreen;
-            this.btnUpdate.Location = new System.Drawing.Point(450, 80);
+            this.btnUpdate.Location = new System.Drawing.Point(730, 41);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(120, 30);
             this.btnUpdate.TabIndex = 10;
@@ -181,7 +186,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 43);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(882, 316);
+            this.panel1.Size = new System.Drawing.Size(876, 316);
             this.panel1.TabIndex = 1;
             // 
             // panel2
@@ -196,11 +201,25 @@
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.btnRefresh);
+            this.panel2.Controls.Add(this.btnExport);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 365);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(882, 185);
+            this.panel2.Size = new System.Drawing.Size(876, 185);
             this.panel2.TabIndex = 2;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExport.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnExport.Location = new System.Drawing.Point(730, 119);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(120, 30);
+            this.btnExport.TabIndex = 12;
+            this.btnExport.Text = "Экспорт в Excel";
+            this.btnExport.UseVisualStyleBackColor = false;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // panelSearch
             // 
@@ -211,7 +230,7 @@
             this.panelSearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelSearch.Location = new System.Drawing.Point(3, 3);
             this.panelSearch.Name = "panelSearch";
-            this.panelSearch.Size = new System.Drawing.Size(882, 34);
+            this.panelSearch.Size = new System.Drawing.Size(876, 34);
             this.panelSearch.TabIndex = 3;
             // 
             // cmbSearchBy
@@ -234,7 +253,7 @@
             this.lblSearchBy.AutoSize = true;
             this.lblSearchBy.Location = new System.Drawing.Point(530, 10);
             this.lblSearchBy.Name = "lblSearchBy";
-            this.lblSearchBy.Size = new System.Drawing.Size(64, 13);
+            this.lblSearchBy.Size = new System.Drawing.Size(62, 13);
             this.lblSearchBy.TabIndex = 2;
             this.lblSearchBy.Text = "Искать по:";
             // 

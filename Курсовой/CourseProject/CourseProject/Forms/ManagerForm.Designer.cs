@@ -29,6 +29,8 @@
         private System.Windows.Forms.ComboBox cmbSearchBy;
         private System.Windows.Forms.Label lblSearchBy;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.Button btnImport;
 
 
         /// <summary>
@@ -69,6 +71,8 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnDeleteRequest = new System.Windows.Forms.Button();
             this.btnAddRequest = new System.Windows.Forms.Button();
+            this.btnImport = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             this.panelSearch = new System.Windows.Forms.Panel();
             this.cmbSearchBy = new System.Windows.Forms.ComboBox();
             this.lblSearchBy = new System.Windows.Forms.Label();
@@ -84,16 +88,18 @@
             // 
             // dataGridViewRequests
             // 
+            this.dataGridViewRequests.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dataGridViewRequests.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewRequests.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewRequests.Name = "dataGridViewRequests";
-            this.dataGridViewRequests.Size = new System.Drawing.Size(882, 316);
+            this.dataGridViewRequests.Size = new System.Drawing.Size(876, 316);
             this.dataGridViewRequests.TabIndex = 0;
             this.dataGridViewRequests.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewRequests_CellFormatting);
             this.dataGridViewRequests.SelectionChanged += new System.EventHandler(this.dataGridViewRequests_SelectionChanged);
             // 
             // btnRefresh
             // 
+            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRefresh.BackColor = System.Drawing.Color.LightBlue;
             this.btnRefresh.Location = new System.Drawing.Point(580, 80);
             this.btnRefresh.Name = "btnRefresh";
@@ -105,6 +111,7 @@
             // 
             // btnUpdate
             // 
+            this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdate.BackColor = System.Drawing.Color.LightGreen;
             this.btnUpdate.Enabled = false;
             this.btnUpdate.Location = new System.Drawing.Point(450, 80);
@@ -189,7 +196,7 @@
             this.cmbMaster.FormattingEnabled = true;
             this.cmbMaster.Location = new System.Drawing.Point(450, 17);
             this.cmbMaster.Name = "cmbMaster";
-            this.cmbMaster.Size = new System.Drawing.Size(200, 21);
+            this.cmbMaster.Size = new System.Drawing.Size(214, 21);
             this.cmbMaster.TabIndex = 8;
             // 
             // cmbStatus
@@ -198,7 +205,7 @@
             this.cmbStatus.FormattingEnabled = true;
             this.cmbStatus.Location = new System.Drawing.Point(450, 47);
             this.cmbStatus.Name = "cmbStatus";
-            this.cmbStatus.Size = new System.Drawing.Size(150, 21);
+            this.cmbStatus.Size = new System.Drawing.Size(214, 21);
             this.cmbStatus.TabIndex = 9;
             // 
             // panel1
@@ -207,7 +214,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 43);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(882, 316);
+            this.panel1.Size = new System.Drawing.Size(876, 316);
             this.panel1.TabIndex = 1;
             // 
             // panel2
@@ -226,17 +233,20 @@
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.btnUpdate);
             this.panel2.Controls.Add(this.btnRefresh);
+            this.panel2.Controls.Add(this.btnImport);
+            this.panel2.Controls.Add(this.btnExport);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 365);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(882, 185);
+            this.panel2.Size = new System.Drawing.Size(876, 185);
             this.panel2.TabIndex = 2;
             // 
             // btnDeleteRequest
             // 
+            this.btnDeleteRequest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDeleteRequest.BackColor = System.Drawing.Color.LightCoral;
             this.btnDeleteRequest.Enabled = false;
-            this.btnDeleteRequest.Location = new System.Drawing.Point(720, 80);
+            this.btnDeleteRequest.Location = new System.Drawing.Point(720, 53);
             this.btnDeleteRequest.Name = "btnDeleteRequest";
             this.btnDeleteRequest.Size = new System.Drawing.Size(120, 30);
             this.btnDeleteRequest.TabIndex = 16;
@@ -246,14 +256,39 @@
             // 
             // btnAddRequest
             // 
+            this.btnAddRequest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddRequest.BackColor = System.Drawing.Color.LightGreen;
-            this.btnAddRequest.Location = new System.Drawing.Point(720, 40);
+            this.btnAddRequest.Location = new System.Drawing.Point(720, 17);
             this.btnAddRequest.Name = "btnAddRequest";
             this.btnAddRequest.Size = new System.Drawing.Size(120, 30);
             this.btnAddRequest.TabIndex = 15;
             this.btnAddRequest.Text = "Добавить заявку";
             this.btnAddRequest.UseVisualStyleBackColor = false;
             this.btnAddRequest.Click += new System.EventHandler(this.btnAddRequest_Click);
+            // 
+            // btnImport
+            // 
+            this.btnImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnImport.BackColor = System.Drawing.Color.LightYellow;
+            this.btnImport.Location = new System.Drawing.Point(720, 125);
+            this.btnImport.Name = "btnImport";
+            this.btnImport.Size = new System.Drawing.Size(120, 30);
+            this.btnImport.TabIndex = 18;
+            this.btnImport.Text = "Импорт из Excel";
+            this.btnImport.UseVisualStyleBackColor = false;
+            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExport.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnExport.Location = new System.Drawing.Point(720, 89);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(120, 30);
+            this.btnExport.TabIndex = 17;
+            this.btnExport.Text = "Экспорт в Excel";
+            this.btnExport.UseVisualStyleBackColor = false;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // panelSearch
             // 
@@ -264,7 +299,7 @@
             this.panelSearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelSearch.Location = new System.Drawing.Point(3, 3);
             this.panelSearch.Name = "panelSearch";
-            this.panelSearch.Size = new System.Drawing.Size(882, 34);
+            this.panelSearch.Size = new System.Drawing.Size(876, 34);
             this.panelSearch.TabIndex = 3;
             // 
             // cmbSearchBy
@@ -288,7 +323,7 @@
             this.lblSearchBy.AutoSize = true;
             this.lblSearchBy.Location = new System.Drawing.Point(530, 10);
             this.lblSearchBy.Name = "lblSearchBy";
-            this.lblSearchBy.Size = new System.Drawing.Size(64, 13);
+            this.lblSearchBy.Size = new System.Drawing.Size(62, 13);
             this.lblSearchBy.TabIndex = 2;
             this.lblSearchBy.Text = "Искать по:";
             // 

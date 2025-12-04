@@ -544,5 +544,44 @@ namespace CourseProject
                 e.Cancel = true;
             }
         }
+        // Экспорт данных
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            if (_allRequestsDataTable == null || _allRequestsDataTable.Rows.Count == 0)
+            {
+                MessageBox.Show("Нет данных для экспорта", "Информация",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            ExcelHelper.ExportToExcel(_allRequestsDataTable, $"Заявки_менеджер_{DateTime.Now:yyyyMMdd}");
+        }
+
+        // Импорт данных
+        private void btnImport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var importedData = ExcelHelper.ImportFromExcel();
+
+                if (importedData != null && importedData.Rows.Count > 0)
+                {
+                    // Передаем ID текущего менеджера
+                    ImportPreviewForm previewForm = new ImportPreviewForm(importedData, connectionString);
+
+                    if (previewForm.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadAllRequests();
+                        MessageBox.Show("Импорт завершен успешно!",
+                            "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при импорте: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

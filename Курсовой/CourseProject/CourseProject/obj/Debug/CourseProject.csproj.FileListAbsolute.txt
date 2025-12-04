@@ -28,3 +28,4 @@ C:\Users\геллпплл\Что то на албанском\Курсовой\C
 C:\Users\геллпплл\Что то на албанском\Курсовой\CourseProject\CourseProject\obj\Debug\CourseProject.pdb
 C:\Users\геллпплл\Что то на албанском\Курсовой\CourseProject\CourseProject\obj\Debug\CourseProject.AddUserForm.resources
 C:\Users\геллпплл\Что то на албанском\Курсовой\CourseProject\CourseProject\obj\Debug\CourseProject.ClientForm.resources
+C:\Users\геллпплл\Что то на албанском\Курсовой\CourseProject\CourseProject\obj\Debug\CourseProject.ImportPreviewForm.resources
