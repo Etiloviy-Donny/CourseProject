@@ -82,8 +82,9 @@
             this.dataGridViewRequests.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dataGridViewRequests.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewRequests.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewRequests.MinimumSize = new System.Drawing.Size(750, 400);
             this.dataGridViewRequests.Name = "dataGridViewRequests";
-            this.dataGridViewRequests.Size = new System.Drawing.Size(876, 316);
+            this.dataGridViewRequests.Size = new System.Drawing.Size(876, 400);
             this.dataGridViewRequests.TabIndex = 0;
             this.dataGridViewRequests.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewRequests_CellFormatting);
             this.dataGridViewRequests.SelectionChanged += new System.EventHandler(this.dataGridViewRequests_SelectionChanged);
@@ -299,6 +300,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 553);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.MinimumSize = new System.Drawing.Size(750, 400);
             this.Name = "MasterForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Панель мастера";

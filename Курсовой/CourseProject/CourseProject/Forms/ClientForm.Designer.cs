@@ -17,8 +17,7 @@
         private System.Windows.Forms.ComboBox cmbSearchBy;
         private System.Windows.Forms.Label lblSearchBy;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Button btnExport;
-        private System.Windows.Forms.Button btnImport;
+
 
 
         /// <summary>
@@ -50,8 +49,7 @@
             this.lblUserInfo = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnImport = new System.Windows.Forms.Button();
-            this.btnExport = new System.Windows.Forms.Button();
+
             this.panelSearch = new System.Windows.Forms.Panel();
             this.cmbSearchBy = new System.Windows.Forms.ComboBox();
             this.lblSearchBy = new System.Windows.Forms.Label();
@@ -156,37 +154,12 @@
             this.panel2.Controls.Add(this.btnCreateRequest);
             this.panel2.Controls.Add(this.btnRefresh);
             this.panel2.Controls.Add(this.btnExit);
-            this.panel2.Controls.Add(this.btnImport);
-            this.panel2.Controls.Add(this.btnExport);
+
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 398);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(663, 58);
             this.panel2.TabIndex = 8;
-            // 
-            // btnImport
-            // 
-            this.btnImport.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnImport.BackColor = System.Drawing.Color.LightYellow;
-            this.btnImport.Location = new System.Drawing.Point(396, 12);
-            this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(120, 30);
-            this.btnImport.TabIndex = 18;
-            this.btnImport.Text = "Импорт из Excel";
-            this.btnImport.UseVisualStyleBackColor = false;
-            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
-            // 
-            // btnExport
-            // 
-            this.btnExport.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnExport.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.btnExport.Location = new System.Drawing.Point(270, 12);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(120, 30);
-            this.btnExport.TabIndex = 17;
-            this.btnExport.Text = "Экспорт в Excel";
-            this.btnExport.UseVisualStyleBackColor = false;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // panelSearch
             // 

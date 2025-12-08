@@ -45,7 +45,7 @@ namespace CourseProject
                     r.RequestDate,
                     r.Address,
                     u.UserSurname + ' ' + u.UserName as ClientName,
-                    u.TelephoneNumber,
+                    r.TelephoneNumber,
                     r.CountersNumber,
                     r.Comment,
                     ISNULL(r.Master, 'Не назначен') as Master,

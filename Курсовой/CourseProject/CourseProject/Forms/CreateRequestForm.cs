@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CourseProject
@@ -18,40 +20,74 @@ namespace CourseProject
         private void CreateRequestForm_Load(object sender, EventArgs e)
         {
             // Автозаполнение информации о пользователе
-            txtAddress.Text = "Введите ваш адрес";
-            lblUserInfo.Text = $"{_currentUser.Surname} {_currentUser.Name} {_currentUser.Patronymic}";
+            txtAddress.Text = "Введите адрес";
+            txtAddress.ForeColor = Color.Gray;
 
-            // Загружаем номер телефона пользователя из базы данных для отображения
-            LoadUserPhoneNumber();
+            // Показываем информацию о том, кто создает заявку
+            lblUserInfo.Text = $"Создаёт: {_currentUser.Surname} {_currentUser.Name} {_currentUser.Patronymic} ({GetRoleName()})";
+
+            // Настраиваем поле телефона в зависимости от роли
+            if (IsAdminOrManager())
+            {
+                // Для админа/менеджера показываем пустое поле с подсказкой
+                txtPhoneNumber.Text = "Введите телефон клиента";
+                txtPhoneNumber.ForeColor = Color.Gray;
+                txtPhoneNumber.Tag = "placeholder";
+                this.Text = "Создание заявки (от администратора)";
+            }
+            else
+            {
+                // Для клиента показываем подсказку с его телефоном
+                txtPhoneNumber.Text = "Введите телефон для заявки";
+                txtPhoneNumber.ForeColor = Color.Gray;
+                txtPhoneNumber.Tag = "placeholder";
+                this.Text = "Создание заявки";
+            }
         }
 
-        private void LoadUserPhoneNumber()
+        private string GetRoleName()
         {
-            try
+            switch (_currentUser.RoleId)
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    string query = "SELECT TelephoneNumber FROM [User] WHERE IdUser = @UserId";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@UserId", _currentUser.Id);
-
-                    var result = command.ExecuteScalar();
-                    if (result != null && result != DBNull.Value)
-                    {
-                        // Показываем текущий номер как подсказку
-                        txtPhoneNumber.Text = result.ToString();
-                    }
-                    else
-                    {
-                        txtPhoneNumber.Text = "";
-                    }
-                }
+                case 1: return "Администратор";
+                case 2: return "Менеджер";
+                case 3: return "Клиент";
+                case 4: return "Мастер";
+                default: return "Пользователь";
             }
-            catch (Exception ex)
+        }
+
+        private bool IsAdminOrManager()
+        {
+            return _currentUser.RoleId == 1 || _currentUser.RoleId == 2;
+        }
+
+        private void txtPhoneNumber_Enter(object sender, EventArgs e)
+        {
+            // Очищаем поле если это подсказка
+            if (txtPhoneNumber.ForeColor == Color.Gray)
             {
-                MessageBox.Show($"Ошибка загрузки номера телефона: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtPhoneNumber.Text = "";
+                txtPhoneNumber.ForeColor = Color.Black;
+                txtPhoneNumber.Tag = null;
+            }
+        }
+
+        private void txtPhoneNumber_Leave(object sender, EventArgs e)
+        {
+            // Если поле пустое, возвращаем подсказку
+            if (string.IsNullOrWhiteSpace(txtPhoneNumber.Text))
+            {
+                if (IsAdminOrManager())
+                {
+                    txtPhoneNumber.Text = "Введите телефон клиента";
+                }
+                else
+                {
+                    txtPhoneNumber.Text = "Введите телефон для заявки";
+                }
+                txtPhoneNumber.ForeColor = Color.Gray;
+                txtPhoneNumber.Tag = "placeholder";
             }
         }
 
@@ -65,36 +101,61 @@ namespace CourseProject
 
         private bool ValidateRequest()
         {
-            if (string.IsNullOrWhiteSpace(txtAddress.Text))
+            // Проверка адреса
+            if (string.IsNullOrWhiteSpace(txtAddress.Text) || txtAddress.ForeColor == Color.Gray)
             {
                 MessageBox.Show("Введите адрес", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtAddress.Focus();
                 return false;
             }
 
+            // Проверка количества счетчиков
             if (string.IsNullOrWhiteSpace(txtCounterNumber.Text))
             {
-                MessageBox.Show("Введите номер счетчика", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Введите количество счетчиков", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtCounterNumber.Focus();
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtPhoneNumber.Text))
+            if (!int.TryParse(txtCounterNumber.Text, out int counterNumber) || counterNumber <= 0 || counterNumber>100)
             {
-                MessageBox.Show("Введите номер телефона для заявки", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Введите корректное количество счетчиков", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtCounterNumber.Focus();
+                return false;
+            }
+
+            // Проверка телефона
+            string phoneNumber = GetPhoneNumberFromField();
+
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                MessageBox.Show("Введите номер телефона для заявки", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtPhoneNumber.Focus();
                 return false;
             }
 
-            // Валидация формата номера телефона
-            if (!IsValidPhoneNumber(txtPhoneNumber.Text))
+            if (!IsValidPhoneNumber(phoneNumber))
             {
-                MessageBox.Show("Введите корректный номер телефона", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Введите корректный номер телефона (10-15 цифр)", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtPhoneNumber.Focus();
                 return false;
             }
 
             return true;
+        }
+
+        private string GetPhoneNumberFromField()
+        {
+            // Если это placeholder (серая подсказка), возвращаем пустую строку
+            if (txtPhoneNumber.ForeColor == Color.Gray)
+            {
+                return "";
+            }
+
+            return txtPhoneNumber.Text.Trim();
         }
 
         private bool IsValidPhoneNumber(string phoneNumber)
@@ -114,6 +175,8 @@ namespace CourseProject
                 {
                     connection.Open();
 
+                    // ВАЖНО: Используем ID текущего пользователя (админа/менеджера/клиента)
+                    // Кто создает заявку - тот и будет в поле IdUser
                     string query = @"
                         INSERT INTO Request 
                         (RequestDate, Address, IdUser, CountersNumber, Comment, Master, Status, TelephoneNumber) 
@@ -122,31 +185,69 @@ namespace CourseProject
 
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@RequestDate", DateTime.Now);
-                    command.Parameters.AddWithValue("@Address", txtAddress.Text.Trim());
+
+                    // Получаем и очищаем адрес
+                    string address = txtAddress.ForeColor == Color.Gray ? "" : txtAddress.Text.Trim();
+                    command.Parameters.AddWithValue("@Address", address);
+
+                    // IdUser - тот, кто создает заявку
                     command.Parameters.AddWithValue("@UserId", _currentUser.Id);
-                    command.Parameters.AddWithValue("@CounterNumber", txtCounterNumber.Text.Trim());
-                    command.Parameters.AddWithValue("@Comment", string.IsNullOrWhiteSpace(txtComment.Text) ? (object)DBNull.Value : txtComment.Text.Trim());
+
+                    command.Parameters.AddWithValue("@CounterNumber", int.Parse(txtCounterNumber.Text.Trim()));
+
+                    string comment = string.IsNullOrWhiteSpace(txtComment.Text) ? "" : txtComment.Text.Trim();
+                    command.Parameters.AddWithValue("@Comment", comment);
+
                     command.Parameters.AddWithValue("@Master", (object)DBNull.Value);
                     command.Parameters.AddWithValue("@Status", "Новая");
-                    command.Parameters.AddWithValue("@TelephoneNumber", txtPhoneNumber.Text.Trim());
+
+                    // ВАЖНО: Получаем телефон ИЗ ПОЛЯ ВВОДА, а не из профиля пользователя
+                    string phoneNumber = GetPhoneNumberFromField();
+                    phoneNumber = CleanPhoneNumber(phoneNumber);
+
+                    command.Parameters.AddWithValue("@TelephoneNumber", phoneNumber);
 
                     int result = command.ExecuteNonQuery();
 
                     if (result > 0)
                     {
-                        MessageBox.Show("Заявка успешно создана!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        string message = IsAdminOrManager()
+                            ? $"Заявка успешно создана!"
+                            : "Заявка успешно создана!";
+
+                        MessageBox.Show(message, "Успех",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.DialogResult = DialogResult.OK;
                         this.Close();
                     }
                     else
                     {
-                        MessageBox.Show("Ошибка при создании заявки", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Ошибка при создании заявки", "Ошибка",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка создания заявки: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка создания заявки: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string CleanPhoneNumber(string phoneNumber)
+        {
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+                return "";
+
+            // Оставляем только цифры и знак + в начале
+            if (phoneNumber.StartsWith("+"))
+            {
+                string digits = new string(phoneNumber.Substring(1).Where(char.IsDigit).ToArray());
+                return "+" + digits;
+            }
+            else
+            {
+                return new string(phoneNumber.Where(char.IsDigit).ToArray());
             }
         }
 
@@ -161,13 +262,52 @@ namespace CourseProject
             // Разрешаем: цифры, +, -, (, ), пробел и Backspace
             if (!char.IsDigit(e.KeyChar) &&
                 e.KeyChar != '+' &&
-                e.KeyChar != '-' &&
                 e.KeyChar != '(' &&
                 e.KeyChar != ')' &&
                 e.KeyChar != ' ' &&
+                e.KeyChar != '-' &&
                 e.KeyChar != (char)Keys.Back)
             {
                 e.Handled = true;
+            }
+
+            // Проверяем, что + только в начале
+            if (e.KeyChar == '+')
+            {
+                TextBox textBox = sender as TextBox;
+                if (textBox.SelectionStart > 0)
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void txtCounterNumber_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Разрешаем только цифры и Backspace
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtAddress_Enter(object sender, EventArgs e)
+        {
+            // Очищаем placeholder при фокусе
+            if (txtAddress.ForeColor == Color.Gray)
+            {
+                txtAddress.Text = "";
+                txtAddress.ForeColor = Color.Black;
+            }
+        }
+
+        private void txtAddress_Leave(object sender, EventArgs e)
+        {
+            // Возвращаем placeholder если поле пустое
+            if (string.IsNullOrWhiteSpace(txtAddress.Text))
+            {
+                txtAddress.Text = "Введите адрес";
+                txtAddress.ForeColor = Color.Gray;
             }
         }
     }

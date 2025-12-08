@@ -92,7 +92,7 @@
             this.dataGridViewRequests.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewRequests.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewRequests.Name = "dataGridViewRequests";
-            this.dataGridViewRequests.Size = new System.Drawing.Size(876, 316);
+            this.dataGridViewRequests.Size = new System.Drawing.Size(876, 324);
             this.dataGridViewRequests.TabIndex = 0;
             this.dataGridViewRequests.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewRequests_CellFormatting);
             this.dataGridViewRequests.SelectionChanged += new System.EventHandler(this.dataGridViewRequests_SelectionChanged);
@@ -214,7 +214,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 43);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(876, 316);
+            this.panel1.Size = new System.Drawing.Size(876, 324);
             this.panel1.TabIndex = 1;
             // 
             // panel2
@@ -236,7 +236,7 @@
             this.panel2.Controls.Add(this.btnImport);
             this.panel2.Controls.Add(this.btnExport);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(3, 365);
+            this.panel2.Location = new System.Drawing.Point(3, 373);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(876, 185);
             this.panel2.TabIndex = 2;
@@ -360,15 +360,16 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 191F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(882, 553);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(882, 561);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // ManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(882, 553);
+            this.ClientSize = new System.Drawing.Size(882, 561);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.MinimumSize = new System.Drawing.Size(850, 400);
             this.Name = "ManagerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Панель менеджера";

@@ -36,13 +36,14 @@ namespace CourseProject
                 {
                     connection.Open();
 
+                    // Используем r.TelephoneNumber - телефон из заявки
                     string query = @"
                 SELECT 
                     r.IdRequest,
                     r.RequestDate,
                     r.Address,
                     u.UserSurname + ' ' + u.UserName as ClientName,
-                    u.TelephoneNumber,
+                    r.TelephoneNumber,  -- Берем телефон из заявки, а не из User
                     r.CountersNumber,
                     r.Comment,
                     ISNULL(r.Master, 'Не назначен') as Master,
@@ -266,8 +267,10 @@ namespace CourseProject
 
         private void UpdateRequest()
         {
+            // Получаем ID выбранной заявки из DataGridView
             int requestId = (int)dataGridViewRequests.SelectedRows[0].Cells["IdRequest"].Value;
 
+            // Используем using для автоматического освобождения ресурсов
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(@"
                 UPDATE Request 
@@ -278,17 +281,22 @@ namespace CourseProject
                     Comment = @Comment
                 WHERE IdRequest = @RequestId", connection))
             {
+                // Добавляем параметр @Master - имя мастера
                 command.Parameters.Add("@Master", SqlDbType.NVarChar, 100).Value =
                     GetMasterValue();
+                // cmbStatus.Text.Trim() - текст из выпадающего списка статусов, обрезанный от пробелов
                 command.Parameters.Add("@Status", SqlDbType.NVarChar, 50).Value = cmbStatus.Text.Trim();
                 command.Parameters.Add("@Address", SqlDbType.NVarChar, 200).Value = txtAddress.Text.Trim();
                 command.Parameters.Add("@CountersNumber", SqlDbType.Int).Value =
                     int.Parse(txtCounterNumber.Text);
+                // Проверяем не пустой ли комментарий, если пустой сохраняем DBNull.Value
                 command.Parameters.Add("@Comment", SqlDbType.NVarChar, 500).Value =
                     string.IsNullOrWhiteSpace(txtComment.Text) ? (object)DBNull.Value : txtComment.Text.Trim();
                 command.Parameters.Add("@RequestId", SqlDbType.Int).Value = requestId;
 
+                // Открываем соединение с базой данных
                 connection.Open();
+                // Выполняем SQL-команду
                 command.ExecuteNonQuery();
             }
         }
